@@ -1,0 +1,21 @@
+
+
+1. Run lệnh này để chuyển .DB của SQLite thành file csv
+
+python -c "import sqlite3,pandas as pd; conn=sqlite3.connect(r'STEP1_ScrapingData\data\posts.db'); df=pd.read_sql_query('SELECT * FROM posts', conn); df.to_csv(r'STEP1_ScrapingData\data\posts.csv', index=False, encoding='utf-8-sig')"
+
+
+python -c "import sqlite3,pandas as pd; conn=sqlite3.connect(r'STEP1_ScrapingData\data\posts.db'); df=pd.read_sql_query('SELECT * FROM comments', conn); df.to_csv(r'STEP1_ScrapingData\data\comments.csv', index=False, encoding='utf-8-sig')"
+
+
+2. Sau đó run lệnh này để chạy file Anonymize_CRF và truyền data csv vào để phân loại và lưu ở STEP2_Anonymize\posts_anonymized.csv
+python STEP2_Anonymize\Anonymize_CRF.py --input STEP1_ScrapingData\data\posts.csv --output STEP2_Anonymize\posts_anonymized.csv --content_col content
+
+python STEP2_Anonymize\Anonymize_CRF.py --input STEP1_ScrapingData\data\comments.csv --output STEP2_Anonymize\comments_anonymized.csv --content_col content
+
+
+3. Run labing
+
+python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/posts_anonymized.csv --output STEP3_Labeling/output_labeled_posts.csv 
+
+python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/comments_anonymized.csv --output STEP3_Labeling/output_labeled_comments.csv          
