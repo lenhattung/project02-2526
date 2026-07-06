@@ -1,0 +1,64 @@
+teencode,standard,group,note
+ko,không,an_toàn,phủ định phổ biến nhất
+k,không,an_toàn,chỉ thay khi đứng độc lập
+hk,không,an_toàn,
+kg,không,an_toàn,
+khg,không,an_toàn,
+đc,được,an_toàn,
+dc,được,an_toàn,
+mk,mình,an_toàn,
+mik,mình,an_toàn,
+mh,mình,an_toàn,
+bn,bạn,an_toàn,chỉ khi đứng độc lập
+bạn ơi,bạn,an_toàn,
+vs,với,an_toàn,chỉ khi đứng giữa 2 từ tiếng Việt
+nt,như thế,an_toàn,
+ntn,như thế nào,an_toàn,
+ns,nói,an_toàn,
+nói chuyện,nói chuyện,an_toàn,
+bt,bình thường,an_toàn,chỉ khi đứng độc lập
+trc,trước,an_toàn,
+r,rồi,an_toàn,chỉ khi đứng cuối câu
+ờ r,ờ rồi,an_toàn,
+xong r,xong rồi,an_toàn,
+đi r,đi rồi,an_toàn,
+bh,bây giờ,an_toàn,
+h,giờ,an_toàn,chỉ khi đứng độc lập
+ngta,người ta,an_toàn,
+ng ta,người ta,an_toàn,
+ng,người,an_toàn,chỉ khi đứng trước danh từ
+nhìu,nhiều,an_toàn,
+nhiu,nhiều,an_toàn,
+bik,biết,an_toàn,
+bit,biết,an_toàn,
+hiu,hiểu,an_toàn,
+hỉu,hiểu,an_toàn,
+thui,thôi,an_toàn,
+thoy,thôi,an_toàn,
+zậy,vậy,an_toàn,
+vy,vậy,an_toàn,
+vy,vậy,an_toàn,
+ik,đi,an_toàn,chỉ khi đứng cuối câu
+đi ik,đi đi,an_toàn,
+lm,làm,an_toàn,
+lm ơn,làm ơn,an_toàn,
+ms,mới,an_toàn,
+mới ms,mới mới,an_toàn,
+cx,cũng,cẩn_thận,
+cg,cũng,cẩn_thận,
+ok,được,cẩn_thận,chỉ khi đứng độc lập
+oke,được,cẩn_thận,
+oce,được,cẩn_thận,
+vl,rất,cẩn_thận,tiếng lóng mạnh
+vãi,rất,cẩn_thận,tiếng lóng
+cl,tệ,cẩn_thận,tiếng lóng thô
+má,mẹ,cẩn_thận,ngữ nghĩa tùy ngữ cảnh
+haha,haha,giữ_nguyên,biểu đạt cảm xúc
+hehe,hehe,giữ_nguyên,
+hihi,hihi,giữ_nguyên,
+huhu,huhu,giữ_nguyên,buồn
+hix,hix,giữ_nguyên,buồn/thở dài
+ừ,ừ,giữ_nguyên,
+uh,ừ,giữ_nguyên,
+uhm,ừm,giữ_nguyên,
+ờ,ờ,giữ_nguyên,

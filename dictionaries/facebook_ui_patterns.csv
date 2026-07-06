@@ -1,0 +1,29 @@
+pattern,type,note
+Like\s*·?\s*Reply,ui_text,nút tương tác
+Thích\s*·?\s*Trả lời,ui_text,nút tương tác tiếng Việt
+\d+\s*tuần,timestamp,thời gian đăng
+\d+\s*tháng,timestamp,thời gian đăng
+\d+\s*ngày,timestamp,thời gian đăng
+\d+\s*giờ,timestamp,thời gian đăng
+\d+\s*phút,timestamp,thời gian đăng
+\d+\s*giây,timestamp,thời gian đăng
+Xem thêm bình luận.*,ui_text,nút xem thêm comment
+Xem thêm.*,ui_text,nút xem thêm nội dung
+See more.*,ui_text,nút xem thêm (tiếng Anh)
+Ẩn bớt.*,ui_text,nút ẩn nội dung
+Phù hợp nhất.*,ui_text,filter comment
+DNTU\s*-\s*Confession,page_name,tên page
+Bình luận dưới tên.*,ui_text,placeholder comment box
+Chia sẻ,ui_text,nút chia sẻ
+\d+\s*·\s*\d+,reaction_count,số reaction và comment
+\d+\s*lượt thích,reaction_count,số like
+\d+\s*bình luận,reaction_count,số comment
+\d+\s*lượt chia sẻ,reaction_count,số share
+Trả lời,ui_text,nút reply
+Chỉnh sửa,ui_text,nút edit
+#[Cc]fs\d+_[Dd][Nn][Tt][Uu],hashtag_confession,mã số confession
+#[Cc][Ff][Ss]\d+_[Dd][Nn][Tt][Uu],hashtag_confession,mã số confession viết hoa
+http[s]?://\S+,url,đường dẫn http
+www\.\S+,url,đường dẫn www
+0[3|5|7|8|9][0-9]{8},phone_number,số điện thoại Việt Nam
+\+84[0-9]{9},phone_number,số điện thoại quốc tế

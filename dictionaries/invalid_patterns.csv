@@ -1,0 +1,8 @@
+rule,type,threshold,note
+min_length,length,20,sau làm sạch ít hơn 20 ký tự → loại
+max_special_ratio,ratio,0.5,hơn 50% ký tự đặc biệt → loại
+only_name_tag,pattern,,"chỉ còn [TÊN] không có nội dung → loại"
+only_numbers,pattern,,"chỉ toàn số → loại"
+only_punctuation,pattern,,"chỉ toàn dấu câu → loại"
+only_emoji_text,pattern,,"chỉ toàn text emoji như [vui_vẻ] → xem xét"
+duplicate_content,duplicate,0.9,"nội dung trùng hơn 90% với bài khác → loại"

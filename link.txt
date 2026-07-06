@@ -1,0 +1,7 @@
+# Danh sách trang Facebook cần cào — mỗi dòng 1 URL
+# Dòng bắt đầu bằng # sẽ bị bỏ qua
+# https://www.facebook.com/DNTUConfession/
+# https://www.facebook.com/groups/504253012548835
+https://www.facebook.com/groups/973360884941952/
+# https://www.facebook.com/groups/UniDNTU/
+# https://www.facebook.com/groups/154682611409767/

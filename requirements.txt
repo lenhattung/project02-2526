@@ -1,0 +1,36 @@
+# ==========================================
+# requirements.txt - project02-2526
+# Cài đặt: pip install -r requirements.txt
+# ==========================================
+
+# === SCRAPING ===
+playwright==1.52.0          # Tự động hóa trình duyệt
+python-dotenv==1.1.1        # Đọc file .env
+
+# === TIỀN XỬ LÝ ===
+underthesea==6.8.4          # NLP tiếng Việt (NER, tách từ)
+
+# === SENTIMENT ANALYSIS ===
+transformers==4.52.4        # PhoBERT, XLM-RoBERTa
+torch==2.7.0                # PyTorch backend cho transformers
+sentencepiece==0.2.0        # Tokenizer cho PhoBERT
+protobuf==6.31.0            # Dependency của sentencepiece
+
+# === DATABASE & DATA ===
+pandas==2.2.3               # Xử lý dữ liệu dạng bảng
+openpyxl==3.1.5             # Đọc/ghi file Excel
+
+# === ĐÁNH GIÁ MÔ HÌNH ===
+scikit-learn==1.6.1         # Metrics: accuracy, f1, confusion matrix
+numpy==2.2.6                # Tính toán số học
+
+# === VISUALIZATION ===
+matplotlib==3.10.3          # Vẽ biểu đồ
+seaborn==0.13.2             # Biểu đồ đẹp hơn (confusion matrix)
+
+# === API GÁN NHÃN (tùy chọn) ===
+anthropic==0.52.0           # Claude API để gán nhãn
+google-generativeai==0.8.5  # Gemini API (backup)
+
+
+# pip freeze > requirements.txt

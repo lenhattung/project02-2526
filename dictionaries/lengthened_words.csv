@@ -1,0 +1,8 @@
+pattern,replacement,example_input,example_output,note
+([a-záàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ])\1{2,},\1\1,buồnnnnn,buồnn,giữ lại 2 ký tự để giữ sắc thái nhấn mạnh
+([AÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸỴD])\1{2,},\1\1,VUIIII,VUII,hoa cũng xử lý
+([!?.])\1{2,},\1,!!!!!,!,dấu câu lặp
+(ha){3,},haha,hahahaha,haha,tiếng cười
+(he){3,},hehe,hehehehe,hehe,tiếng cười
+(hi){3,},hihi,hihihihi,hihi,tiếng cười
+(hu){3,},huhu,huhuhuu,huhu,tiếng khóc
