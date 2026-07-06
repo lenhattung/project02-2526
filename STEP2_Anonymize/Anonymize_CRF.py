@@ -1,7 +1,3 @@
-#!pip install underthesea
-#!pip install tqdm
-#!pip install pandas
-
 # -*- coding: utf-8 -*-
 """
 Pipeline ẩn danh tên người (Bước 1 - CRF-based, dùng underthesea)
@@ -50,9 +46,26 @@ def mask_structured_mentions(text: str):
 #    để bắt tên gõ tay trong nội dung (không phải mention)
 # ==========================================================
 
+COMMON_VN_SURNAMES = {
+    "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ",
+    "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Đoàn",
+    "Trịnh", "Trương", "Lâm", "Mai", "Tô", "Tăng", "Chu", "Cao",
+}
+
 HONORIFIC_WORDS = {
     "thầy", "cô", "anh", "chị", "em", "bạn", "ông", "bà",
     "chú", "dì", "cậu", "mợ", "bác", "sếp", "sư", "mr", "mrs", "ms",
+    "sinh viên", "học sinh", "giáo viên", "giảng viên",
+}
+
+# Các từ chức năng cực kỳ phổ biến, gần như không bao giờ là 1 phần của
+# tên riêng -> dùng làm điểm DỪNG khi gom từ viết thường xuyên qua
+# nhiều token (vì không có tín hiệu viết hoa để biết tên kết thúc ở đâu).
+FUNCTION_STOPWORDS = {
+    "là", "và", "với", "của", "cho", "này", "đó", "rồi", "không", "có",
+    "đã", "sẽ", "đang", "vẫn", "cũng", "chỉ", "mà", "nhưng", "nếu", "thì",
+    "nên", "phải", "ơi", "à", "nhé", "nhỉ", "vậy", "sao", "đâu", "gì",
+    "ai", "khi", "trong", "ngoài", "trên", "dưới", "giữa",
 }
 
 
@@ -76,29 +89,100 @@ def extract_leading_capitalized_run(s: str):
     return match.group(0) if match else None
 
 
+SURNAMES_LOWER = {s.lower() for s in COMMON_VN_SURNAMES}
+PLAIN_WORD_RE = re.compile(r"^[^\W\d_]+$", re.UNICODE)  # chỉ gồm chữ cái, không số/ký tự đặc biệt
+
+
+def collect_plain_words_after(tagged, start_idx: int, max_words: int = 4):
+    """
+    Gom tối đa max_words từ 'thường' (chỉ chữ cái, không số/ký tự đặc biệt)
+    bắt đầu từ token start_idx, có thể XUYÊN QUA NHIỀU TOKEN (vì
+    underthesea đôi khi tách tên thành nhiều token nhỏ, VD: "phạm" tách
+    riêng khỏi "thế an" phía sau). Dừng lại khi:
+      - gặp từ không phải chữ cái thuần (số, dấu câu...), hoặc
+      - gặp từ nằm trong FUNCTION_STOPWORDS (là, và, ơi, không...) —
+        dấu hiệu đã ra khỏi phạm vi tên riêng, hoặc
+      - đã đủ max_words từ.
+    """
+    n = len(tagged)
+    words = []
+    idx = start_idx
+    while idx < n and len(words) < max_words:
+        token_str = tagged[idx][0]
+        subwords = token_str.split(" ")
+        hit_stop = False
+        for sw in subwords:
+            if not PLAIN_WORD_RE.match(sw) or sw.lower() in FUNCTION_STOPWORDS:
+                hit_stop = True
+                break
+            words.append(sw)
+            if len(words) >= max_words:
+                hit_stop = True
+                break
+        if hit_stop:
+            break
+        idx += 1
+    return words
+
+
+def extract_name_case_insensitive(words):
+    """
+    Nhận vào danh sách từ (đã gom bằng collect_plain_words_after), kiểm
+    tra từ ĐẦU TIÊN có khớp 1 họ Việt Nam phổ biến không (không phân
+    biệt hoa/thường). Yêu cầu tối thiểu 2 từ để tăng độ tin cậy (tránh
+    trường hợp chỉ trùng họ ngẫu nhiên với 1 từ thường bất kỳ).
+    """
+    if len(words) < 2:
+        return None
+    if words[0].lower() not in SURNAMES_LOWER:
+        return None
+    return " ".join(words)
+
+
 def honorific_based_per_detection(tagged, extend_to_next_token: bool = True):
     """
-    Bổ sung phát hiện PER dựa trên DANH XƯNG (thầy/cô/anh/chị/bạn...),
-    độc lập với nhãn NER/POS trả về.
+    Bổ sung phát hiện PER dựa trên DANH XƯNG (thầy/cô/anh/chị/bạn/sinh
+    viên...), độc lập với nhãn NER/POS trả về.
 
     Lý do cần lớp này: underthesea đôi khi gắn NHẦM HẲN sang nhãn khác
-    (VD: "thầy Lê Nhật Tùng" bị gắn LOC thay vì PER), hoặc gộp nhầm cả
-    cụm tên + từ phía sau thành 1 token với POS sai hoàn toàn (VD:
-    "Trần Thị Bích khen" bị gắn POS 'A' - tính từ). Vì vậy lớp này chỉ
-    dựa vào: (1) từ danh xưng đứng trước, (2) chuỗi từ viết hoa liên
-    tiếp ngay sau đó trong CHUỖI GỐC của token — không tin vào POS/NER.
+    (VD: "thầy Lê Nhật Tùng" bị gắn LOC thay vì PER), gộp nhầm cả cụm
+    tên + từ phía sau thành 1 token (VD: "Trần Thị Bích khen"), hoặc
+    ngược lại TÁCH RỜI 1 tên thành nhiều token nhỏ (VD: "phạm" tách
+    khỏi "thế an"). Vì vậy lớp này chỉ dựa vào: (1) từ danh xưng đứng
+    trước, (2) chuỗi từ liên tiếp ngay sau đó (có thể xuyên nhiều
+    token) — không tin vào POS/NER của các token này.
 
-    Trả về danh sách các phrase (chuỗi) được coi là PER bổ sung.
+    2 nhánh phát hiện:
+      - Viết hoa chuẩn: dùng chuỗi viết hoa liên tiếp làm ranh giới tên
+        (đáng tin cậy nhất vì viết hoa là tín hiệu rõ ràng).
+      - Viết thường hoàn toàn: so khớp họ VN không phân biệt hoa/thường,
+        dừng lại đúng chỗ nhờ FUNCTION_STOPWORDS (là, và, ơi...) để
+        không nuốt nhầm sang phần câu tiếp theo.
     """
     extra_phrases = []
     n = len(tagged)
     for i, item in enumerate(tagged):
         word = item[0]
         if word.lower() in HONORIFIC_WORDS and i + 1 < n:
+            # Ưu tiên 1: chuỗi viết hoa liên tiếp trong token ngay sau
+            # (đã tự nhiên dừng đúng chỗ nhờ tín hiệu viết hoa, kể cả
+            # khi token đó bị gộp nhầm với từ phía sau)
             next_word = tagged[i + 1][0]
             leading = extract_leading_capitalized_run(next_word)
             if leading:
                 extra_phrases.append(leading)
+                continue
+
+            # Ưu tiên 2: tên viết thường hoàn toàn, gom xuyên nhiều
+            # token, dừng lại nhờ FUNCTION_STOPWORDS.
+            # Giới hạn 3 từ (Họ + đệm + tên) thay vì 4, vì đây là độ dài
+            # phổ biến nhất của tên Việt Nam — nếu để 4, dễ nuốt nhầm
+            # từ đầu câu tiếp theo khi tên chỉ có 3 từ (VD: "nguyễn văn
+            # nam nghỉ học" -> "nghỉ" bị nuốt nhầm nếu cap = 4).
+            collected = collect_plain_words_after(tagged, i + 1, max_words=3)
+            leading_ci = extract_name_case_insensitive(collected)
+            if leading_ci:
+                extra_phrases.append(leading_ci)
     return extra_phrases
 
 
@@ -245,12 +329,6 @@ def anonymize_pipeline(text: str, extend_to_next_token: bool = True) -> str:
 # để hạn chế bắt nhầm (giảm rủi ro precision).
 # ==========================================================
 
-COMMON_VN_SURNAMES = {
-    "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ",
-    "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Đoàn",
-    "Trịnh", "Trương", "Lâm", "Mai", "Tô", "Tăng", "Chu", "Cao",
-}
-
 # Cụm 2-4 từ viết hoa liên tiếp ngay đầu chuỗi, từ đầu tiên là họ phổ biến
 NAME_AT_START_PATTERN = re.compile(
     r"^(?:" + "|".join(COMMON_VN_SURNAMES) + r")"
@@ -347,7 +425,6 @@ def run(input_path: str, output_path: str, content_col: str = "content",
 #         extend_to_next_token=not args.no_extend,
 #     )
 
-
 print(anonymize_pipeline("Nguyễn Tuấn Kiệt trường hok có đọc đâu bà ơi 🥲🥲🥲"))
 
 print(anonymize_pipeline("Hùng Minh môn hiểu biết về DNTU:)))???"))
@@ -355,3 +432,9 @@ print(anonymize_pipeline("Hùng Minh môn hiểu biết về DNTU:)))???"))
 print(anonymize_pipeline("Hoàng Nam bào nào mục xương thì thôi"))
 
 print(anonymize_pipeline("Các bạn có biết thầy Lê Nhật Tùng không?"))
+
+print(anonymize_pipeline("tui không biết cô nguyễn thị liệu"))
+
+print(anonymize_pipeline("sinh viên phạm thế an là ai?"))
+
+print(anonymize_pipeline("thông báo về vi phạm nguyên tắc cộng đồng"))
