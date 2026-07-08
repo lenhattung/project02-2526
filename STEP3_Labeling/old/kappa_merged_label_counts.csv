@@ -1,0 +1,13 @@
+﻿data_type,model,sentiment_label,count
+comment,vsfc_phobert,negative,7534
+comment,vsfc_phobert,neutral,5077
+comment,vsfc_phobert,positive,1186
+comment,phobert_student_vn,negative,1259
+comment,phobert_student_vn,neutral,12067
+comment,phobert_student_vn,positive,471
+post,vsfc_phobert,negative,1218
+post,vsfc_phobert,neutral,450
+post,vsfc_phobert,positive,139
+post,phobert_student_vn,negative,93
+post,phobert_student_vn,neutral,1693
+post,phobert_student_vn,positive,21

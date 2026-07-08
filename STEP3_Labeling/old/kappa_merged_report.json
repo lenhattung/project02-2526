@@ -1,0 +1,99 @@
+{
+  "total_rows": 15604,
+  "diagnostics": [
+    {
+      "data_type": "post",
+      "phobert_student_vn_rows": 1807,
+      "vsfc_phobert_rows": 1807,
+      "merged_rows": 1807,
+      "both_models_rows": 1807,
+      "only_phobert_student_vn_rows": 0,
+      "only_vsfc_phobert_rows": 0,
+      "merge_columns": [
+        "id",
+        "content_anonymized"
+      ]
+    },
+    {
+      "data_type": "comment",
+      "phobert_student_vn_rows": 13797,
+      "vsfc_phobert_rows": 13797,
+      "merged_rows": 13797,
+      "both_models_rows": 13797,
+      "only_phobert_student_vn_rows": 0,
+      "only_vsfc_phobert_rows": 0,
+      "merge_columns": [
+        "id",
+        "content_anonymized"
+      ]
+    }
+  ],
+  "by_data_type": {
+    "comment": {
+      "rows": 13797,
+      "comparable_rows": 13797,
+      "agree_count": 6492,
+      "disagree_count": 7305,
+      "observed_agreement": 0.4705370732767993,
+      "expected_agreement": 0.3746013685250029,
+      "cohen_kappa": 0.15339928794780516,
+      "merge_status_counts": {
+        "both_models": 13797
+      },
+      "confusion_matrix": {
+        "negative": {
+          "negative": 1234,
+          "neutral": 13,
+          "positive": 12
+        },
+        "neutral": {
+          "negative": 6201,
+          "neutral": 4975,
+          "positive": 891
+        },
+        "positive": {
+          "negative": 99,
+          "neutral": 89,
+          "positive": 283
+        }
+      }
+    },
+    "post": {
+      "rows": 1807,
+      "comparable_rows": 1807,
+      "agree_count": 544,
+      "disagree_count": 1263,
+      "observed_agreement": 0.3010514665190924,
+      "expected_agreement": 0.26890537291336747,
+      "cohen_kappa": 0.04396981240831324,
+      "merge_status_counts": {
+        "both_models": 1807
+      },
+      "confusion_matrix": {
+        "negative": {
+          "negative": 93,
+          "neutral": 0,
+          "positive": 0
+        },
+        "neutral": {
+          "negative": 1119,
+          "neutral": 443,
+          "positive": 131
+        },
+        "positive": {
+          "negative": 6,
+          "neutral": 7,
+          "positive": 8
+        }
+      }
+    }
+  },
+  "overall": {
+    "comparable_rows": 15604,
+    "agree_count": 7036,
+    "disagree_count": 8568,
+    "observed_agreement": 0.4509100230710074,
+    "expected_agreement": 0.36362071957702696,
+    "cohen_kappa": 0.1371655334786562
+  }
+}

@@ -1,0 +1,904 @@
+{
+  "total_rows": 15604,
+  "model_columns": [
+    "vsfc_phobert",
+    "phobert_student_vn",
+    "3.5 Flash",
+    "3.1 Pro",
+    "GPT5.5_Medium"
+  ],
+  "label_mapping": {
+    "0": "negative",
+    "1": "neutral",
+    "2": "positive"
+  },
+  "merge_status_counts": {
+    "both_input_files": 15604,
+    "only_training_file": 0,
+    "only_llm_file": 0
+  },
+  "by_data_type": {
+    "comment": {
+      "vsfc_phobert vs phobert_student_vn": {
+        "data_type": "comment",
+        "model_a": "vsfc_phobert",
+        "model_b": "phobert_student_vn",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 6492,
+        "disagree_count": 7305,
+        "observed_agreement": 0.4705370732767993,
+        "expected_agreement": 0.3746013685250029,
+        "cohen_kappa": 0.15339928794780516,
+        "confusion_matrix": {
+          "0": {
+            "0": 1234,
+            "1": 13,
+            "2": 12
+          },
+          "1": {
+            "0": 6201,
+            "1": 4975,
+            "2": 891
+          },
+          "2": {
+            "0": 99,
+            "1": 89,
+            "2": 283
+          }
+        }
+      },
+      "vsfc_phobert vs 3.5 Flash": {
+        "data_type": "comment",
+        "model_a": "vsfc_phobert",
+        "model_b": "3.5 Flash",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 4672,
+        "disagree_count": 9125,
+        "observed_agreement": 0.3386243386243386,
+        "expected_agreement": 0.3084539761244345,
+        "cohen_kappa": 0.04362741084219274,
+        "confusion_matrix": {
+          "0": {
+            "0": 946,
+            "1": 152,
+            "2": 50
+          },
+          "1": {
+            "0": 5074,
+            "1": 3264,
+            "2": 674
+          },
+          "2": {
+            "0": 1514,
+            "1": 1661,
+            "2": 462
+          }
+        }
+      },
+      "vsfc_phobert vs 3.1 Pro": {
+        "data_type": "comment",
+        "model_a": "vsfc_phobert",
+        "model_b": "3.1 Pro",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 4714,
+        "disagree_count": 9083,
+        "observed_agreement": 0.34166847865478,
+        "expected_agreement": 0.30888740336595283,
+        "cohen_kappa": 0.04743232209698121,
+        "confusion_matrix": {
+          "0": {
+            "0": 988,
+            "1": 160,
+            "2": 51
+          },
+          "1": {
+            "0": 5023,
+            "1": 3259,
+            "2": 668
+          },
+          "2": {
+            "0": 1523,
+            "1": 1658,
+            "2": 467
+          }
+        }
+      },
+      "vsfc_phobert vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "vsfc_phobert",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 5803,
+        "disagree_count": 7994,
+        "observed_agreement": 0.42059868087265345,
+        "expected_agreement": 0.3736591347060567,
+        "cohen_kappa": 0.07494249340503735,
+        "confusion_matrix": {
+          "0": {
+            "0": 921,
+            "1": 211,
+            "2": 54
+          },
+          "1": {
+            "0": 6388,
+            "1": 4751,
+            "2": 1001
+          },
+          "2": {
+            "0": 225,
+            "1": 115,
+            "2": 131
+          }
+        }
+      },
+      "phobert_student_vn vs 3.5 Flash": {
+        "data_type": "comment",
+        "model_a": "phobert_student_vn",
+        "model_b": "3.5 Flash",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8211,
+        "disagree_count": 5586,
+        "observed_agreement": 0.5951293759512938,
+        "expected_agreement": 0.5878745732188163,
+        "cohen_kappa": 0.017603385428410803,
+        "confusion_matrix": {
+          "0": {
+            "0": 207,
+            "1": 927,
+            "2": 14
+          },
+          "1": {
+            "0": 895,
+            "1": 7832,
+            "2": 285
+          },
+          "2": {
+            "0": 157,
+            "1": 3308,
+            "2": 172
+          }
+        }
+      },
+      "phobert_student_vn vs 3.1 Pro": {
+        "data_type": "comment",
+        "model_a": "phobert_student_vn",
+        "model_b": "3.1 Pro",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8187,
+        "disagree_count": 5610,
+        "observed_agreement": 0.5933898673624701,
+        "expected_agreement": 0.5843088348705511,
+        "cohen_kappa": 0.021845623033848117,
+        "confusion_matrix": {
+          "0": {
+            "0": 219,
+            "1": 965,
+            "2": 15
+          },
+          "1": {
+            "0": 876,
+            "1": 7793,
+            "2": 281
+          },
+          "2": {
+            "0": 164,
+            "1": 3309,
+            "2": 175
+          }
+        }
+      },
+      "phobert_student_vn vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "phobert_student_vn",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 10928,
+        "disagree_count": 2869,
+        "observed_agreement": 0.7920562441110386,
+        "expected_agreement": 0.778580416148043,
+        "cohen_kappa": 0.06086104818987319,
+        "confusion_matrix": {
+          "0": {
+            "0": 178,
+            "1": 984,
+            "2": 24
+          },
+          "1": {
+            "0": 1055,
+            "1": 10694,
+            "2": 391
+          },
+          "2": {
+            "0": 26,
+            "1": 389,
+            "2": 56
+          }
+        }
+      },
+      "3.5 Flash vs 3.1 Pro": {
+        "data_type": "comment",
+        "model_a": "3.5 Flash",
+        "model_b": "3.1 Pro",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 13625,
+        "disagree_count": 172,
+        "observed_agreement": 0.9875335217800971,
+        "expected_agreement": 0.5006462770737513,
+        "cohen_kappa": 0.9750347746546307,
+        "confusion_matrix": {
+          "0": {
+            "0": 1135,
+            "1": 61,
+            "2": 3
+          },
+          "1": {
+            "0": 10,
+            "1": 8898,
+            "2": 42
+          },
+          "2": {
+            "0": 3,
+            "1": 53,
+            "2": 3592
+          }
+        }
+      },
+      "3.5 Flash vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "3.5 Flash",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8909,
+        "disagree_count": 4888,
+        "observed_agreement": 0.6457200840762485,
+        "expected_agreement": 0.5908903350227203,
+        "cohen_kappa": 0.13402213085475073,
+        "confusion_matrix": {
+          "0": {
+            "0": 353,
+            "1": 640,
+            "2": 193
+          },
+          "1": {
+            "0": 764,
+            "1": 8244,
+            "2": 3132
+          },
+          "2": {
+            "0": 31,
+            "1": 128,
+            "2": 312
+          }
+        }
+      },
+      "3.1 Pro vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "3.1 Pro",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8873,
+        "disagree_count": 4924,
+        "observed_agreement": 0.643110821193013,
+        "expected_agreement": 0.5872812623555538,
+        "cohen_kappa": 0.135272653614181,
+        "confusion_matrix": {
+          "0": {
+            "0": 364,
+            "1": 632,
+            "2": 190
+          },
+          "1": {
+            "0": 807,
+            "1": 8192,
+            "2": 3141
+          },
+          "2": {
+            "0": 28,
+            "1": 126,
+            "2": 317
+          }
+        }
+      }
+    },
+    "post": {
+      "vsfc_phobert vs phobert_student_vn": {
+        "data_type": "post",
+        "model_a": "vsfc_phobert",
+        "model_b": "phobert_student_vn",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 544,
+        "disagree_count": 1263,
+        "observed_agreement": 0.3010514665190924,
+        "expected_agreement": 0.26890537291336747,
+        "cohen_kappa": 0.04396981240831324,
+        "confusion_matrix": {
+          "0": {
+            "0": 93,
+            "1": 0,
+            "2": 0
+          },
+          "1": {
+            "0": 1119,
+            "1": 443,
+            "2": 131
+          },
+          "2": {
+            "0": 6,
+            "1": 7,
+            "2": 8
+          }
+        }
+      },
+      "vsfc_phobert vs 3.5 Flash": {
+        "data_type": "post",
+        "model_a": "vsfc_phobert",
+        "model_b": "3.5 Flash",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 478,
+        "disagree_count": 1329,
+        "observed_agreement": 0.2645268400664084,
+        "expected_agreement": 0.23495145393199723,
+        "cohen_kappa": 0.038658182263615885,
+        "confusion_matrix": {
+          "0": {
+            "0": 103,
+            "1": 5,
+            "2": 1
+          },
+          "1": {
+            "0": 876,
+            "1": 321,
+            "2": 84
+          },
+          "2": {
+            "0": 239,
+            "1": 124,
+            "2": 54
+          }
+        }
+      },
+      "vsfc_phobert vs 3.1 Pro": {
+        "data_type": "post",
+        "model_a": "vsfc_phobert",
+        "model_b": "3.1 Pro",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 512,
+        "disagree_count": 1295,
+        "observed_agreement": 0.28334255672385167,
+        "expected_agreement": 0.23530732265747575,
+        "cohen_kappa": 0.06281639080592344,
+        "confusion_matrix": {
+          "0": {
+            "0": 129,
+            "1": 4,
+            "2": 1
+          },
+          "1": {
+            "0": 811,
+            "1": 316,
+            "2": 71
+          },
+          "2": {
+            "0": 278,
+            "1": 130,
+            "2": 67
+          }
+        }
+      },
+      "vsfc_phobert vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "vsfc_phobert",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 667,
+        "disagree_count": 1140,
+        "observed_agreement": 0.369120088544549,
+        "expected_agreement": 0.30211386635444953,
+        "cohen_kappa": 0.09601311583607312,
+        "confusion_matrix": {
+          "0": {
+            "0": 221,
+            "1": 7,
+            "2": 7
+          },
+          "1": {
+            "0": 985,
+            "1": 439,
+            "2": 125
+          },
+          "2": {
+            "0": 12,
+            "1": 4,
+            "2": 7
+          }
+        }
+      },
+      "phobert_student_vn vs 3.5 Flash": {
+        "data_type": "post",
+        "model_a": "phobert_student_vn",
+        "model_b": "3.5 Flash",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1191,
+        "disagree_count": 616,
+        "observed_agreement": 0.659103486441616,
+        "expected_agreement": 0.669972489081231,
+        "cohen_kappa": -0.03293362607667644,
+        "confusion_matrix": {
+          "0": {
+            "0": 5,
+            "1": 104,
+            "2": 0
+          },
+          "1": {
+            "0": 84,
+            "1": 1181,
+            "2": 16
+          },
+          "2": {
+            "0": 4,
+            "1": 408,
+            "2": 5
+          }
+        }
+      },
+      "phobert_student_vn vs 3.1 Pro": {
+        "data_type": "post",
+        "model_a": "phobert_student_vn",
+        "model_b": "3.1 Pro",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1111,
+        "disagree_count": 696,
+        "observed_agreement": 0.6148312119535141,
+        "expected_agreement": 0.6280228552248236,
+        "cohen_kappa": -0.0354635854826042,
+        "confusion_matrix": {
+          "0": {
+            "0": 5,
+            "1": 129,
+            "2": 0
+          },
+          "1": {
+            "0": 83,
+            "1": 1100,
+            "2": 15
+          },
+          "2": {
+            "0": 5,
+            "1": 464,
+            "2": 6
+          }
+        }
+      },
+      "phobert_student_vn vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "phobert_student_vn",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1454,
+        "disagree_count": 353,
+        "observed_agreement": 0.8046485888212507,
+        "expected_agreement": 0.8099826383837803,
+        "cohen_kappa": -0.028071379989491843,
+        "confusion_matrix": {
+          "0": {
+            "0": 9,
+            "1": 226,
+            "2": 0
+          },
+          "1": {
+            "0": 83,
+            "1": 1445,
+            "2": 21
+          },
+          "2": {
+            "0": 1,
+            "1": 22,
+            "2": 0
+          }
+        }
+      },
+      "3.5 Flash vs 3.1 Pro": {
+        "data_type": "post",
+        "model_a": "3.5 Flash",
+        "model_b": "3.1 Pro",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1645,
+        "disagree_count": 162,
+        "observed_agreement": 0.9103486441615938,
+        "expected_agreement": 0.5351258051070531,
+        "cohen_kappa": 0.807149209779107,
+        "confusion_matrix": {
+          "0": {
+            "0": 77,
+            "1": 55,
+            "2": 2
+          },
+          "1": {
+            "0": 15,
+            "1": 1168,
+            "2": 15
+          },
+          "2": {
+            "0": 17,
+            "1": 58,
+            "2": 400
+          }
+        }
+      },
+      "3.5 Flash vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "3.5 Flash",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1260,
+        "disagree_count": 547,
+        "observed_agreement": 0.6972883231876038,
+        "expected_agreement": 0.6184750381976994,
+        "cohen_kappa": 0.20657438668650993,
+        "confusion_matrix": {
+          "0": {
+            "0": 63,
+            "1": 98,
+            "2": 74
+          },
+          "1": {
+            "0": 45,
+            "1": 1179,
+            "2": 325
+          },
+          "2": {
+            "0": 1,
+            "1": 4,
+            "2": 18
+          }
+        }
+      },
+      "3.1 Pro vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "3.1 Pro",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1239,
+        "disagree_count": 568,
+        "observed_agreement": 0.685666851134477,
+        "expected_agreement": 0.5813085005155808,
+        "cohen_kappa": 0.2492487923624055,
+        "confusion_matrix": {
+          "0": {
+            "0": 85,
+            "1": 63,
+            "2": 87
+          },
+          "1": {
+            "0": 49,
+            "1": 1133,
+            "2": 367
+          },
+          "2": {
+            "0": 0,
+            "1": 2,
+            "2": 21
+          }
+        }
+      }
+    }
+  },
+  "overall": {
+    "vsfc_phobert vs phobert_student_vn": {
+      "data_type": "overall",
+      "model_a": "vsfc_phobert",
+      "model_b": "phobert_student_vn",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 7036,
+      "disagree_count": 8568,
+      "observed_agreement": 0.4509100230710074,
+      "expected_agreement": 0.36362071957702696,
+      "cohen_kappa": 0.1371655334786562,
+      "confusion_matrix": {
+        "0": {
+          "0": 1327,
+          "1": 13,
+          "2": 12
+        },
+        "1": {
+          "0": 7320,
+          "1": 5418,
+          "2": 1022
+        },
+        "2": {
+          "0": 105,
+          "1": 96,
+          "2": 291
+        }
+      }
+    },
+    "vsfc_phobert vs 3.5 Flash": {
+      "data_type": "overall",
+      "model_a": "vsfc_phobert",
+      "model_b": "3.5 Flash",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 5150,
+      "disagree_count": 10454,
+      "observed_agreement": 0.33004357856959754,
+      "expected_agreement": 0.30089032327995346,
+      "cohen_kappa": 0.04170054608086663,
+      "confusion_matrix": {
+        "0": {
+          "0": 1049,
+          "1": 157,
+          "2": 51
+        },
+        "1": {
+          "0": 5950,
+          "1": 3585,
+          "2": 758
+        },
+        "2": {
+          "0": 1753,
+          "1": 1785,
+          "2": 516
+        }
+      }
+    },
+    "vsfc_phobert vs 3.1 Pro": {
+      "data_type": "overall",
+      "model_a": "vsfc_phobert",
+      "model_b": "3.1 Pro",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 5226,
+      "disagree_count": 10378,
+      "observed_agreement": 0.33491412458344016,
+      "expected_agreement": 0.30070617216639906,
+      "cohen_kappa": 0.04891785263287208,
+      "confusion_matrix": {
+        "0": {
+          "0": 1117,
+          "1": 164,
+          "2": 52
+        },
+        "1": {
+          "0": 5834,
+          "1": 3575,
+          "2": 739
+        },
+        "2": {
+          "0": 1801,
+          "1": 1788,
+          "2": 534
+        }
+      }
+    },
+    "vsfc_phobert vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "vsfc_phobert",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 6470,
+      "disagree_count": 9134,
+      "observed_agreement": 0.41463727249423227,
+      "expected_agreement": 0.36450012143673055,
+      "cohen_kappa": 0.07889403719612219,
+      "confusion_matrix": {
+        "0": {
+          "0": 1142,
+          "1": 218,
+          "2": 61
+        },
+        "1": {
+          "0": 7373,
+          "1": 5190,
+          "2": 1126
+        },
+        "2": {
+          "0": 237,
+          "1": 119,
+          "2": 138
+        }
+      }
+    },
+    "phobert_student_vn vs 3.5 Flash": {
+      "data_type": "overall",
+      "model_a": "phobert_student_vn",
+      "model_b": "3.5 Flash",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 9402,
+      "disagree_count": 6202,
+      "observed_agreement": 0.602537810817739,
+      "expected_agreement": 0.5968573908937302,
+      "cohen_kappa": 0.014090348664959472,
+      "confusion_matrix": {
+        "0": {
+          "0": 212,
+          "1": 1031,
+          "2": 14
+        },
+        "1": {
+          "0": 979,
+          "1": 9013,
+          "2": 301
+        },
+        "2": {
+          "0": 161,
+          "1": 3716,
+          "2": 177
+        }
+      }
+    },
+    "phobert_student_vn vs 3.1 Pro": {
+      "data_type": "overall",
+      "model_a": "phobert_student_vn",
+      "model_b": "3.1 Pro",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 9298,
+      "disagree_count": 6306,
+      "observed_agreement": 0.595872853114586,
+      "expected_agreement": 0.5892244713937316,
+      "cohen_kappa": 0.016184950801261082,
+      "confusion_matrix": {
+        "0": {
+          "0": 224,
+          "1": 1094,
+          "2": 15
+        },
+        "1": {
+          "0": 959,
+          "1": 8893,
+          "2": 296
+        },
+        "2": {
+          "0": 169,
+          "1": 3773,
+          "2": 181
+        }
+      }
+    },
+    "phobert_student_vn vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "phobert_student_vn",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 12382,
+      "disagree_count": 3222,
+      "observed_agreement": 0.793514483465778,
+      "expected_agreement": 0.7824918330841625,
+      "cohen_kappa": 0.05067694945854901,
+      "confusion_matrix": {
+        "0": {
+          "0": 187,
+          "1": 1210,
+          "2": 24
+        },
+        "1": {
+          "0": 1138,
+          "1": 12139,
+          "2": 412
+        },
+        "2": {
+          "0": 27,
+          "1": 411,
+          "2": 56
+        }
+      }
+    },
+    "3.5 Flash vs 3.1 Pro": {
+      "data_type": "overall",
+      "model_a": "3.5 Flash",
+      "model_b": "3.1 Pro",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 15270,
+      "disagree_count": 334,
+      "observed_agreement": 0.978595231991797,
+      "expected_agreement": 0.5045225777035722,
+      "cohen_kappa": 0.9567997106528151,
+      "confusion_matrix": {
+        "0": {
+          "0": 1212,
+          "1": 116,
+          "2": 5
+        },
+        "1": {
+          "0": 25,
+          "1": 10066,
+          "2": 57
+        },
+        "2": {
+          "0": 20,
+          "1": 111,
+          "2": 3992
+        }
+      }
+    },
+    "3.5 Flash vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "3.5 Flash",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 10169,
+      "disagree_count": 5435,
+      "observed_agreement": 0.6516918738784927,
+      "expected_agreement": 0.5942454744282698,
+      "cohen_kappa": 0.1415791958679396,
+      "confusion_matrix": {
+        "0": {
+          "0": 416,
+          "1": 738,
+          "2": 267
+        },
+        "1": {
+          "0": 809,
+          "1": 9423,
+          "2": 3457
+        },
+        "2": {
+          "0": 32,
+          "1": 132,
+          "2": 330
+        }
+      }
+    },
+    "3.1 Pro vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "3.1 Pro",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 10112,
+      "disagree_count": 5492,
+      "observed_agreement": 0.6480389643681107,
+      "expected_agreement": 0.586676940873389,
+      "cohen_kappa": 0.14846019872296806,
+      "confusion_matrix": {
+        "0": {
+          "0": 449,
+          "1": 695,
+          "2": 277
+        },
+        "1": {
+          "0": 856,
+          "1": 9325,
+          "2": 3508
+        },
+        "2": {
+          "0": 28,
+          "1": 128,
+          "2": 338
+        }
+      }
+    }
+  },
+  "input_rows": {
+    "training": 15604,
+    "llm": 15604
+  },
+  "llm_key_alignment": "copied_data_type_from_training_row_order",
+  "row_order_id_matches": true
+}

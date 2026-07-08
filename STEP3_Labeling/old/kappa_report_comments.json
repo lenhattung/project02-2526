@@ -1,0 +1,35 @@
+{
+  "total_compared": 13797,
+  "agree_count": 2426,
+  "disagree_count": 11371,
+  "observed_agreement": 0.17583532652025802,
+  "expected_agreement": 0.14308501444775856,
+  "cohen_kappa": 0.03821885790851635,
+  "file_a_label_counts": {
+    "negative": 7534,
+    "neutral": 5077,
+    "positive": 1186
+  },
+  "file_b_label_counts": {
+    "negative": 1496,
+    "neutral": 354,
+    "positive": 11947
+  },
+  "confusion_matrix": {
+    "negative": {
+      "negative": 1185,
+      "neutral": 267,
+      "positive": 44
+    },
+    "neutral": {
+      "negative": 231,
+      "neutral": 111,
+      "positive": 12
+    },
+    "positive": {
+      "negative": 6118,
+      "neutral": 4699,
+      "positive": 1130
+    }
+  }
+}

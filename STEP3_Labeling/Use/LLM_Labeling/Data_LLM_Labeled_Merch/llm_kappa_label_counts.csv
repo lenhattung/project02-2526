@@ -1,0 +1,25 @@
+﻿data_type,model,label,count
+comment,3.5 Flash,0,1148
+comment,3.5 Flash,1,9012
+comment,3.5 Flash,2,3637
+comment,3.1 Pro,0,1199
+comment,3.1 Pro,1,8950
+comment,3.1 Pro,2,3648
+comment,GPT5.5_Medium,0,1186
+comment,GPT5.5_Medium,1,12140
+comment,GPT5.5_Medium,2,471
+comment,label,0,1154
+comment,label,1,9020
+comment,label,2,3607
+post,3.5 Flash,0,109
+post,3.5 Flash,1,1281
+post,3.5 Flash,2,417
+post,3.1 Pro,0,134
+post,3.1 Pro,1,1198
+post,3.1 Pro,2,475
+post,GPT5.5_Medium,0,235
+post,GPT5.5_Medium,1,1549
+post,GPT5.5_Medium,2,23
+post,label,0,131
+post,label,1,1242
+post,label,2,403

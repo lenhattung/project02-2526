@@ -1,0 +1,272 @@
+{
+  "total_rows": 15604,
+  "by_data_type": {
+    "comment": {
+      "3.5 Flash vs 3.1 Pro": {
+        "data_type": "comment",
+        "model_a": "3.5 Flash",
+        "model_b": "3.1 Pro",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 13625,
+        "disagree_count": 172,
+        "observed_agreement": 0.9875335217800971,
+        "expected_agreement": 0.5006462770737513,
+        "cohen_kappa": 0.9750347746546307,
+        "confusion_matrix": {
+          "0": {
+            "0": 1135,
+            "1": 61,
+            "2": 3
+          },
+          "1": {
+            "0": 10,
+            "1": 8898,
+            "2": 42
+          },
+          "2": {
+            "0": 3,
+            "1": 53,
+            "2": 3592
+          }
+        }
+      },
+      "3.5 Flash vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "3.5 Flash",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8909,
+        "disagree_count": 4888,
+        "observed_agreement": 0.6457200840762485,
+        "expected_agreement": 0.5908903350227203,
+        "cohen_kappa": 0.13402213085475073,
+        "confusion_matrix": {
+          "0": {
+            "0": 353,
+            "1": 640,
+            "2": 193
+          },
+          "1": {
+            "0": 764,
+            "1": 8244,
+            "2": 3132
+          },
+          "2": {
+            "0": 31,
+            "1": 128,
+            "2": 312
+          }
+        }
+      },
+      "3.1 Pro vs GPT5.5_Medium": {
+        "data_type": "comment",
+        "model_a": "3.1 Pro",
+        "model_b": "GPT5.5_Medium",
+        "rows": 13797,
+        "comparable_rows": 13797,
+        "agree_count": 8873,
+        "disagree_count": 4924,
+        "observed_agreement": 0.643110821193013,
+        "expected_agreement": 0.5872812623555538,
+        "cohen_kappa": 0.135272653614181,
+        "confusion_matrix": {
+          "0": {
+            "0": 364,
+            "1": 632,
+            "2": 190
+          },
+          "1": {
+            "0": 807,
+            "1": 8192,
+            "2": 3141
+          },
+          "2": {
+            "0": 28,
+            "1": 126,
+            "2": 317
+          }
+        }
+      }
+    },
+    "post": {
+      "3.5 Flash vs 3.1 Pro": {
+        "data_type": "post",
+        "model_a": "3.5 Flash",
+        "model_b": "3.1 Pro",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1645,
+        "disagree_count": 162,
+        "observed_agreement": 0.9103486441615938,
+        "expected_agreement": 0.5351258051070531,
+        "cohen_kappa": 0.807149209779107,
+        "confusion_matrix": {
+          "0": {
+            "0": 77,
+            "1": 55,
+            "2": 2
+          },
+          "1": {
+            "0": 15,
+            "1": 1168,
+            "2": 15
+          },
+          "2": {
+            "0": 17,
+            "1": 58,
+            "2": 400
+          }
+        }
+      },
+      "3.5 Flash vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "3.5 Flash",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1260,
+        "disagree_count": 547,
+        "observed_agreement": 0.6972883231876038,
+        "expected_agreement": 0.6184750381976994,
+        "cohen_kappa": 0.20657438668650993,
+        "confusion_matrix": {
+          "0": {
+            "0": 63,
+            "1": 98,
+            "2": 74
+          },
+          "1": {
+            "0": 45,
+            "1": 1179,
+            "2": 325
+          },
+          "2": {
+            "0": 1,
+            "1": 4,
+            "2": 18
+          }
+        }
+      },
+      "3.1 Pro vs GPT5.5_Medium": {
+        "data_type": "post",
+        "model_a": "3.1 Pro",
+        "model_b": "GPT5.5_Medium",
+        "rows": 1807,
+        "comparable_rows": 1807,
+        "agree_count": 1239,
+        "disagree_count": 568,
+        "observed_agreement": 0.685666851134477,
+        "expected_agreement": 0.5813085005155808,
+        "cohen_kappa": 0.2492487923624055,
+        "confusion_matrix": {
+          "0": {
+            "0": 85,
+            "1": 63,
+            "2": 87
+          },
+          "1": {
+            "0": 49,
+            "1": 1133,
+            "2": 367
+          },
+          "2": {
+            "0": 0,
+            "1": 2,
+            "2": 21
+          }
+        }
+      }
+    }
+  },
+  "overall": {
+    "3.5 Flash vs 3.1 Pro": {
+      "data_type": "overall",
+      "model_a": "3.5 Flash",
+      "model_b": "3.1 Pro",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 15270,
+      "disagree_count": 334,
+      "observed_agreement": 0.978595231991797,
+      "expected_agreement": 0.5045225777035722,
+      "cohen_kappa": 0.9567997106528151,
+      "confusion_matrix": {
+        "0": {
+          "0": 1212,
+          "1": 116,
+          "2": 5
+        },
+        "1": {
+          "0": 25,
+          "1": 10066,
+          "2": 57
+        },
+        "2": {
+          "0": 20,
+          "1": 111,
+          "2": 3992
+        }
+      }
+    },
+    "3.5 Flash vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "3.5 Flash",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 10169,
+      "disagree_count": 5435,
+      "observed_agreement": 0.6516918738784927,
+      "expected_agreement": 0.5942454744282698,
+      "cohen_kappa": 0.1415791958679396,
+      "confusion_matrix": {
+        "0": {
+          "0": 416,
+          "1": 738,
+          "2": 267
+        },
+        "1": {
+          "0": 809,
+          "1": 9423,
+          "2": 3457
+        },
+        "2": {
+          "0": 32,
+          "1": 132,
+          "2": 330
+        }
+      }
+    },
+    "3.1 Pro vs GPT5.5_Medium": {
+      "data_type": "overall",
+      "model_a": "3.1 Pro",
+      "model_b": "GPT5.5_Medium",
+      "rows": 15604,
+      "comparable_rows": 15604,
+      "agree_count": 10112,
+      "disagree_count": 5492,
+      "observed_agreement": 0.6480389643681107,
+      "expected_agreement": 0.586676940873389,
+      "cohen_kappa": 0.14846019872296806,
+      "confusion_matrix": {
+        "0": {
+          "0": 449,
+          "1": 695,
+          "2": 277
+        },
+        "1": {
+          "0": 856,
+          "1": 9325,
+          "2": 3508
+        },
+        "2": {
+          "0": 28,
+          "1": 128,
+          "2": 338
+        }
+      }
+    }
+  }
+}
