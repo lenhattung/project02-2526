@@ -1,0 +1,10 @@
+﻿data_type,model_a,model_b,rows,comparable_rows,agree_count,disagree_count,observed_agreement,expected_agreement,cohen_kappa
+comment,3.5 Flash,3.1 Pro,13797,13797,13625,172,0.988,0.501,0.975
+comment,3.5 Flash,GPT5.5_Medium,13797,13797,8909,4888,0.646,0.591,0.134
+comment,3.1 Pro,GPT5.5_Medium,13797,13797,8873,4924,0.643,0.587,0.135
+post,3.5 Flash,3.1 Pro,1807,1807,1645,162,0.910,0.535,0.807
+post,3.5 Flash,GPT5.5_Medium,1807,1807,1260,547,0.697,0.618,0.207
+post,3.1 Pro,GPT5.5_Medium,1807,1807,1239,568,0.686,0.581,0.249
+overall,3.5 Flash,3.1 Pro,15604,15604,15270,334,0.979,0.505,0.957
+overall,3.5 Flash,GPT5.5_Medium,15604,15604,10169,5435,0.652,0.594,0.142
+overall,3.1 Pro,GPT5.5_Medium,15604,15604,10112,5492,0.648,0.587,0.148

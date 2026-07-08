@@ -1,0 +1,55 @@
+﻿data_type,model,label,label_name,count
+comment,vsfc_phobert,0,negative,7534
+comment,vsfc_phobert,1,neutral,5077
+comment,vsfc_phobert,2,positive,1186
+comment,phobert_student_vn,0,negative,1259
+comment,phobert_student_vn,1,neutral,12067
+comment,phobert_student_vn,2,positive,471
+comment,3.5 Flash,0,negative,1148
+comment,3.5 Flash,1,neutral,9012
+comment,3.5 Flash,2,positive,3637
+comment,3.1 Pro,0,negative,1199
+comment,3.1 Pro,1,neutral,8950
+comment,3.1 Pro,2,positive,3648
+comment,GPT5.5_Medium,0,negative,1186
+comment,GPT5.5_Medium,1,neutral,12140
+comment,GPT5.5_Medium,2,positive,471
+comment,llm_majority_label,0,negative,1154
+comment,llm_majority_label,1,neutral,9020
+comment,llm_majority_label,2,positive,3607
+post,vsfc_phobert,0,negative,1218
+post,vsfc_phobert,1,neutral,450
+post,vsfc_phobert,2,positive,139
+post,phobert_student_vn,0,negative,93
+post,phobert_student_vn,1,neutral,1693
+post,phobert_student_vn,2,positive,21
+post,3.5 Flash,0,negative,109
+post,3.5 Flash,1,neutral,1281
+post,3.5 Flash,2,positive,417
+post,3.1 Pro,0,negative,134
+post,3.1 Pro,1,neutral,1198
+post,3.1 Pro,2,positive,475
+post,GPT5.5_Medium,0,negative,235
+post,GPT5.5_Medium,1,neutral,1549
+post,GPT5.5_Medium,2,positive,23
+post,llm_majority_label,0,negative,131
+post,llm_majority_label,1,neutral,1242
+post,llm_majority_label,2,positive,403
+overall,vsfc_phobert,0,negative,8752
+overall,vsfc_phobert,1,neutral,5527
+overall,vsfc_phobert,2,positive,1325
+overall,phobert_student_vn,0,negative,1352
+overall,phobert_student_vn,1,neutral,13760
+overall,phobert_student_vn,2,positive,492
+overall,3.5 Flash,0,negative,1257
+overall,3.5 Flash,1,neutral,10293
+overall,3.5 Flash,2,positive,4054
+overall,3.1 Pro,0,negative,1333
+overall,3.1 Pro,1,neutral,10148
+overall,3.1 Pro,2,positive,4123
+overall,GPT5.5_Medium,0,negative,1421
+overall,GPT5.5_Medium,1,neutral,13689
+overall,GPT5.5_Medium,2,positive,494
+overall,llm_majority_label,0,negative,1285
+overall,llm_majority_label,1,neutral,10262
+overall,llm_majority_label,2,positive,4010

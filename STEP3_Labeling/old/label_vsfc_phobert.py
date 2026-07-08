@@ -20,9 +20,9 @@ Install:
     pip install transformers torch pandas openpyxl tqdm
 
 Example:
-    python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/posts_anonymized.csv --output STEP3_Labeling/output_labeled.csv
+    python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/comments_anonymized.csv --output STEP3_Labeling/output_labeled_comments_vsfc_phobert.csv
 
-    python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/posts_anonymized.csv --output STEP3_Labeling/output_labeled.csv
+    python STEP3_Labeling/label_vsfc_phobert.py --input STEP2_Anonymize/posts_anonymized.csv --output STEP3_Labeling/output_labeled_post_vsfc_phobert.csv
 """
 
 from __future__ import annotations
