@@ -1,0 +1,4 @@
+﻿data_type,model_a,model_b,rows,comparable_rows,agree_count,disagree_count,observed_agreement,expected_agreement,cohen_kappa
+comment,3.5 Flash,3.1 Pro,13797,13797,13625,172,0.987533522,0.500646277,0.975034775
+post,3.5 Flash,3.1 Pro,1807,1807,1645,162,0.910348644,0.535125805,0.80714921
+overall,3.5 Flash,3.1 Pro,15604,15604,15270,334,0.978595232,0.504522578,0.956799711

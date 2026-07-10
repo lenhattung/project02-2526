@@ -23,16 +23,46 @@ pip install transformers torch datasets scikit-learn pandas underthesea --break-
 import numpy as np
 import pandas as pd
 import torch
+import sys
+import json
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 from transformers import (
-    AutoTokenizer, AutoModelForSequenceClassification,
+    AutoConfig, AutoTokenizer, AutoModelForSequenceClassification,
     TrainingArguments, Trainer, DataCollatorWithPadding,
 )
 from datasets import Dataset
 from underthesea import word_tokenize
 
+try:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+except Exception:
+    plt = None
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 MODEL_NAME = "VoVanPhuc/sup-SimCSE-VietNamese-phobert-base"
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_TOKENIZATION_INPUT = SCRIPT_DIR / "Tokenization" / "merch_datasets_student_sentiment_preprocessed.csv"
+DEFAULT_CONTENT_COL = "content_preprocessed"
+DEFAULT_LABEL_COL = "label"
+WORD_SEGMENTED_COL = "word_segmented"
+LOSS_LABELS_VI = {
+    "train_loss": "Mất mát huấn luyện",
+    "eval_loss": "Mất mát đánh giá",
+}
+LEGACY_TOKENIZED_COLS = (
+    "content_phobert_tokenized",
+    "content_bgem3_tokenized",
+    "content_simcse_tokenized",
+)
 
 ID2LABEL = {0: "tieu_cuc", 1: "trung_lap", 2: "tich_cuc"}
 LABEL2ID = {v: k for k, v in ID2LABEL.items()}
@@ -56,13 +86,63 @@ def preprocess_for_phobert(text: str) -> str:
         return text
 
 
-def load_and_split(input_path: str, content_col: str, label_col: str = "sentiment_label"):
-    if input_path.endswith(".csv"):
-        df = pd.read_csv(input_path)
-    else:
-        df = pd.read_excel(input_path)
+def read_dataframe(input_path: str | Path) -> pd.DataFrame:
+    input_path = Path(input_path)
+    if input_path.suffix.lower() == ".csv":
+        return pd.read_csv(input_path, encoding="utf-8-sig")
+    return pd.read_excel(input_path)
 
-    df = df[[content_col, label_col]].dropna().copy()
+
+def write_dataframe(df: pd.DataFrame, output_path: str | Path) -> None:
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if output_path.suffix.lower() == ".csv":
+        df.to_csv(output_path, index=False, encoding="utf-8-sig")
+    else:
+        df.to_excel(output_path, index=False)
+
+
+def tokenize_dataset_file(
+    input_path: str | Path = DEFAULT_TOKENIZATION_INPUT,
+    output_path: str | Path | None = None,
+    content_col: str = DEFAULT_CONTENT_COL,
+    word_segmented_col: str = WORD_SEGMENTED_COL,
+) -> Path:
+    """Read dataset, tokenize content_col with underthesea, and save a new column."""
+    input_path = Path(input_path)
+    output_path = Path(output_path) if output_path else input_path
+
+    df = read_dataframe(input_path)
+    if content_col not in df.columns:
+        raise ValueError(f"Missing column '{content_col}'. Available columns: {list(df.columns)}")
+
+    df = df.drop(columns=list(LEGACY_TOKENIZED_COLS), errors="ignore")
+    df[word_segmented_col] = df[content_col].apply(preprocess_for_phobert)
+    write_dataframe(df, output_path)
+    print(f"Saved word_segmented column '{word_segmented_col}' to: {output_path}")
+    return output_path
+
+
+def build_model_text(df: pd.DataFrame, content_col: str) -> pd.Series:
+    if content_col == WORD_SEGMENTED_COL:
+        return df[content_col]
+    if content_col == DEFAULT_CONTENT_COL and WORD_SEGMENTED_COL in df.columns:
+        word_segmented = df[WORD_SEGMENTED_COL].fillna("").astype(str).copy()
+        missing_mask = word_segmented.str.strip().eq("")
+        if missing_mask.any():
+            word_segmented.loc[missing_mask] = df.loc[missing_mask, content_col].apply(preprocess_for_phobert)
+        return word_segmented
+    return df[content_col].apply(preprocess_for_phobert)
+
+
+def load_and_split(input_path: str, content_col: str, label_col: str = DEFAULT_LABEL_COL):
+    df = read_dataframe(input_path)
+
+    missing_cols = [col for col in (content_col, label_col) if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing columns {missing_cols}. Available columns: {list(df.columns)}")
+
+    df = df.dropna(subset=[content_col, label_col]).copy()
     df[label_col] = df[label_col].astype(int)
 
     train_df, temp_df = train_test_split(
@@ -88,15 +168,197 @@ def compute_metrics(eval_pred):
     }
 
 
-def run(input_path: str, output_dir: str, content_col: str = "content",
-        label_col: str = "sentiment_label", epochs: int = 4,
-        batch_size: int = 16, learning_rate: float = 2e-5):
+def build_regularized_config(
+    hidden_dropout: float,
+    attention_dropout: float,
+    classifier_dropout: float,
+):
+    config = AutoConfig.from_pretrained(
+        MODEL_NAME,
+        num_labels=3,
+        id2label=ID2LABEL,
+        label2id=LABEL2ID,
+    )
+    dropout_values = {
+        "hidden_dropout_prob": hidden_dropout,
+        "attention_probs_dropout_prob": attention_dropout,
+        "classifier_dropout": classifier_dropout,
+    }
+    for attr, value in dropout_values.items():
+        if hasattr(config, attr):
+            setattr(config, attr, value)
+    return config
+
+
+def safe_float(value) -> float | None:
+    try:
+        result = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not np.isfinite(result):
+        return None
+    return result
+
+
+def epoch_bucket(value) -> int | None:
+    epoch = safe_float(value)
+    if epoch is None or epoch <= 0:
+        return None
+    return max(1, int(np.ceil(epoch - 1e-8)))
+
+class MinimumEpochEarlyStoppingCallback:
+    """Early stopping co min_epochs: van theo doi best metric tu dau, nhung chi tinh patience sau min_epochs."""
+
+    def __init__(
+        self,
+        early_stopping_patience: int,
+        early_stopping_threshold: float = 0.0,
+        min_epochs: int = 20,
+        metric_name: str = "eval_loss",
+        greater_is_better: bool = False,
+    ):
+        self.early_stopping_patience = max(1, int(early_stopping_patience))
+        self.early_stopping_threshold = float(early_stopping_threshold)
+        self.min_epochs = max(1, int(min_epochs))
+        self.metric_name = metric_name
+        self.greater_is_better = bool(greater_is_better)
+        self.best_score: float | None = None
+        self.bad_epochs = 0
+
+    def _is_improvement(self, current: float) -> bool:
+        if self.best_score is None:
+            return True
+        if self.greater_is_better:
+            return current > self.best_score + self.early_stopping_threshold
+        return current < self.best_score - self.early_stopping_threshold
+
+    def on_evaluate(self, args, state, control, metrics=None, **kwargs):
+        metrics = metrics or {}
+        metric_value = metrics.get(self.metric_name)
+        if metric_value is None and not self.metric_name.startswith("eval_"):
+            metric_value = metrics.get(f"eval_{self.metric_name}")
+        if metric_value is None:
+            return control
+
+        current = float(metric_value)
+        if self._is_improvement(current):
+            self.best_score = current
+            self.bad_epochs = 0
+        else:
+            self.bad_epochs += 1
+
+        # Yeu cau cua ban: khong dung va khong tinh patience truoc/sat min_epochs.
+        current_epoch = float(state.epoch or 0.0)
+        if current_epoch <= self.min_epochs:
+            self.bad_epochs = 0
+            return control
+
+        if self.bad_epochs >= self.early_stopping_patience:
+            control.should_training_stop = True
+        return control
+
+
+
+def trainer_epoch_loss_history(log_history: list[dict]) -> pd.DataFrame:
+    train_losses: dict[int, list[float]] = {}
+    eval_losses: dict[int, list[float]] = {}
+    fallback_train_loss: dict[int, float] = {}
+    seen_epochs: list[int] = []
+
+    for row in log_history:
+        epoch = epoch_bucket(row.get("epoch"))
+        if epoch is None:
+            continue
+        seen_epochs.append(epoch)
+
+        loss = safe_float(row.get("loss"))
+        if loss is not None:
+            train_losses.setdefault(epoch, []).append(loss)
+
+        train_loss = safe_float(row.get("train_loss"))
+        if train_loss is not None:
+            fallback_train_loss[epoch] = train_loss
+
+        eval_loss = safe_float(row.get("eval_loss"))
+        if eval_loss is not None:
+            eval_losses.setdefault(epoch, []).append(eval_loss)
+
+    if not train_losses and fallback_train_loss:
+        train_losses = {epoch: [loss] for epoch, loss in fallback_train_loss.items()}
+
+    if not train_losses and not eval_losses:
+        return pd.DataFrame()
+
+    max_epoch = max(seen_epochs + list(train_losses.keys()) + list(eval_losses.keys()))
+    rows = []
+    for epoch in range(1, max_epoch + 1):
+        row = {"epoch": epoch}
+        if epoch in train_losses:
+            row["train_loss"] = float(np.mean(train_losses[epoch]))
+        if epoch in eval_losses:
+            row["eval_loss"] = float(np.mean(eval_losses[epoch]))
+        rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def save_trainer_loss_artifacts(trainer: Trainer, output_dir: str | Path, title: str) -> None:
+    report_dir = Path(output_dir) / "reports"
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    log_history = trainer.state.log_history
+    with (report_dir / "trainer_log_history.json").open("w", encoding="utf-8") as f:
+        json.dump(log_history, f, ensure_ascii=False, indent=2)
+    if log_history:
+        pd.DataFrame(log_history).to_csv(report_dir / "trainer_log_history.csv", index=False, encoding="utf-8-sig")
+
+    loss_history = trainer_epoch_loss_history(log_history)
+    if loss_history.empty:
+        return
+    loss_history.to_csv(report_dir / "loss_curve_points.csv", index=False, encoding="utf-8-sig")
+
+    if plt is None:
+        return
+    fig, ax = plt.subplots(figsize=(8, 5))
+    for column in ("train_loss", "eval_loss"):
+        if column not in loss_history.columns:
+            continue
+        points = loss_history[["epoch", column]].dropna()
+        if not points.empty:
+            ax.plot(points["epoch"], points[column], marker="o", label=LOSS_LABELS_VI.get(column, column))
+    max_epoch = max(float(loss_history["epoch"].max()), 1.0)
+    ax.set_xlim(left=0, right=max_epoch)
+    if max_epoch <= 25:
+        ax.set_xticks(range(0, int(np.ceil(max_epoch)) + 1))
+    ax.set_title(title)
+    ax.set_xlabel("Vòng huấn luyện")
+    ax.set_ylabel("Giá trị mất mát")
+    ax.grid(True, alpha=0.25)
+    if ax.get_legend_handles_labels()[0]:
+        ax.legend()
+    fig.tight_layout()
+    fig.savefig(report_dir / "loss_curve.png", dpi=200)
+    plt.close(fig)
+
+
+def run(input_path: str, output_dir: str, content_col: str = DEFAULT_CONTENT_COL,
+        label_col: str = DEFAULT_LABEL_COL, epochs: int = 50,
+        min_epochs: int = 20, batch_size: int = 16, learning_rate: float = 2e-5,
+        patience: int = 5, weight_decay: float = 1e-2,
+        label_smoothing: float = 0.05, warmup_ratio: float = 0.1,
+        lr_scheduler_type: str = "linear", monitor: str = "eval_loss",
+        hidden_dropout: float = 0.2, attention_dropout: float = 0.2,
+        classifier_dropout: float = 0.3):
+
+    min_epochs = max(1, int(min_epochs))
+    if epochs < min_epochs:
+        print(f"[INFO] epochs={epochs} < min_epochs={min_epochs}; tu dong nang epochs len {min_epochs}.")
+        epochs = min_epochs
 
     train_df, val_df, test_df = load_and_split(input_path, content_col, label_col)
 
-    print("Đang tách từ (word segmentation)...")
+    print("Đang chuẩn bị văn bản đã tách từ cho SimCSE...")
     for d in (train_df, val_df, test_df):
-        d["text_segmented"] = d[content_col].apply(preprocess_for_phobert)
+        d["text_segmented"] = build_model_text(d, content_col)
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
 
@@ -120,9 +382,8 @@ def run(input_path: str, output_dir: str, content_col: str = "content",
     # vi ĐÚNG và bình thường (transformers sẽ in cảnh báo về việc này,
     # không phải lỗi). Backbone (phần encoder) vẫn giữ nguyên trọng số
     # đã pretrain bằng contrastive learning.
-    model = AutoModelForSequenceClassification.from_pretrained(
-        MODEL_NAME, num_labels=3, id2label=ID2LABEL, label2id=LABEL2ID,
-    )
+    model_config = build_regularized_config(hidden_dropout, attention_dropout, classifier_dropout)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, config=model_config)
 
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
@@ -132,14 +393,32 @@ def run(input_path: str, output_dir: str, content_col: str = "content",
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
         learning_rate=learning_rate,
+        weight_decay=weight_decay,
+        warmup_ratio=warmup_ratio,
+        label_smoothing_factor=label_smoothing,
+        lr_scheduler_type=lr_scheduler_type,
         eval_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,
-        metric_for_best_model="f1_macro",
-        greater_is_better=True,
+        metric_for_best_model=monitor,
+        greater_is_better=not monitor.endswith("loss"),
+        logging_strategy="epoch",
         logging_steps=50,
+        save_total_limit=2,
         report_to="none",
     )
+
+    callbacks = []
+    if patience > 0:
+        callbacks.append(
+            MinimumEpochEarlyStoppingCallback(
+                early_stopping_patience=patience,
+                early_stopping_threshold=1e-4,
+                min_epochs=min_epochs,
+                metric_name=monitor,
+                greater_is_better=not monitor.endswith("loss"),
+            )
+        )
 
     trainer = Trainer(
         model=model,
@@ -148,10 +427,12 @@ def run(input_path: str, output_dir: str, content_col: str = "content",
         eval_dataset=val_ds,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
+        callbacks=callbacks,
     )
 
     print("Bắt đầu fine-tune SimCSE...")
     trainer.train()
+    save_trainer_loss_artifacts(trainer, output_dir, "Hàm mất mát SimCSE")
 
     print("\n=== Đánh giá trên tập TEST ===")
     test_results = trainer.predict(test_ds)
@@ -170,21 +451,52 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Fine-tune SimCSE (VN) cho phân loại cảm xúc 3 lớp")
-    parser.add_argument("--input", required=True)
+    parser.add_argument("--input", default=str(DEFAULT_TOKENIZATION_INPUT))
     parser.add_argument("--output_dir", default="./simcse_sentiment_model")
-    parser.add_argument("--content_col", default="content")
-    parser.add_argument("--label_col", default="sentiment_label")
-    parser.add_argument("--epochs", type=int, default=4)
+    parser.add_argument("--content_col", default=DEFAULT_CONTENT_COL)
+    parser.add_argument("--label_col", default=DEFAULT_LABEL_COL)
+    parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=2e-5)
+    parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--min_epochs", type=int, default=20)
+    parser.add_argument("--weight_decay", type=float, default=1e-2)
+    parser.add_argument("--label_smoothing", type=float, default=0.05)
+    parser.add_argument("--warmup_ratio", type=float, default=0.1)
+    parser.add_argument("--lr_scheduler_type", default="linear")
+    parser.add_argument("--monitor", choices=["eval_loss", "eval_f1_macro"], default="eval_loss")
+    parser.add_argument("--hidden_dropout", type=float, default=0.2)
+    parser.add_argument("--attention_dropout", type=float, default=0.2)
+    parser.add_argument("--classifier_dropout", type=float, default=0.3)
+    parser.add_argument("--tokenize_only", action="store_true")
+    parser.add_argument("--tokenized_output", default=None)
+    parser.add_argument("--word_segmented_col", default=WORD_SEGMENTED_COL)
     args = parser.parse_args()
 
-    run(
-        input_path=args.input,
-        output_dir=args.output_dir,
-        content_col=args.content_col,
-        label_col=args.label_col,
-        epochs=args.epochs,
-        batch_size=args.batch_size,
-        learning_rate=args.lr,
-    )
+    if args.tokenize_only:
+        tokenize_dataset_file(
+            input_path=args.input,
+            output_path=args.tokenized_output,
+            content_col=args.content_col,
+            word_segmented_col=args.word_segmented_col,
+        )
+    else:
+        run(
+            input_path=args.input,
+            output_dir=args.output_dir,
+            content_col=args.content_col,
+            label_col=args.label_col,
+            epochs=args.epochs,
+            min_epochs=args.min_epochs,
+            batch_size=args.batch_size,
+            learning_rate=args.lr,
+            patience=args.patience,
+            weight_decay=args.weight_decay,
+            label_smoothing=args.label_smoothing,
+            warmup_ratio=args.warmup_ratio,
+            lr_scheduler_type=args.lr_scheduler_type,
+            monitor=args.monitor,
+            hidden_dropout=args.hidden_dropout,
+            attention_dropout=args.attention_dropout,
+            classifier_dropout=args.classifier_dropout,
+        )

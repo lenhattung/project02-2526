@@ -1,0 +1,23 @@
+hãy code cho tôi bước tiền xử lý data cho [merch_datasets_student_sentiment.csv](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP3_Labeling/merch_datasets_student_sentiment.csv) tôi cần thực hiện chuyển chữ lowcase hết và các từ viết tắt sang từ từ phổ thông (sử dụng [behitek/7d9441c10b3c2739499fc5a4d9ea06fb](https://gist.github.com/behitek/7d9441c10b3c2739499fc5a4d9ea06fb) ) , cungg4 như xóa các từ trùng lặp vd "nhaaa" , sau đó CHUYỂN ĐỔI EMOJ sang emoji.demojize  nhưng thay vì :smiling_face_with_heart_eyes: thì thành <smiling_face_with_heart_eyes> 
+, rồi xử lý dấu câu (. , : .... ) cũng như xóa các ký tự như "#Cfs2295_DNTU", "#Cfs2245_DNTU", hoặc #24399 những cái này là id posdt người ta tự quy định trong content thôi và nó ở phía đầu nội dung, LOẠI BỎ KÝ TỰ ĐẶC BIỆT nhưng k mang ý nghĩa về mặt cảm xúc, xóa link (hyperlink) (nếu có trong 'content_anonymized' , cũng như chuyển đổi các số 1 2 3, ... sang chữ, vd 100k là một trăm k, 3 bước -> ba bước.
+
+hãy tạo file ipynb, chia thành từng mục # và lấy data tự [merch_datasets_student_sentiment.csv](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP3_Labeling/merch_datasets_student_sentiment.csv) data là cột 'content_anonymized', sau đó tạo cột mới lưu nd đã được xử lý, vào file mới giống file [merch_datasets_student_sentiment.csv](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP3_Labeling/merch_datasets_student_sentiment.csv) nhưng có thêm cột thôi
+
+
+
+
+
+
+
+
+
+
+
+-----------------
+
+code cho tôi pipline [pipeline.py](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP5_Pipeline/pipeline.py) lấy tự fie [STEP4_TrainingModel](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP4_TrainingModel/) để chạy train và và xuất model cũng như tập đánh giá cho các model lstm phobert, simcse, chỉ số đánh giá gồm accuracy, precision, recall, f1 (macro) , f1 (weighted)
+
+xuất confushion matric, và bbieu63 đồ, trong lúc train có ghi nhận lại mà xuất ra biểu đồ loss cho từng model
+
+sử dụng datasets [merch_datasets_student_sentiment_preprocessed.csv](a:/A _ Working/Researching/Th Tùng/Emotion social classcification/project02-2526/STEP4_TrainingModel/Tokenization/merch_datasets_student_sentiment_preprocessed.csv) chia theo phân phối và lấy cột content_ph obert_tokenized, ...
+nhưng trước phải sửa lại cho tôi là mỗi cái có kiểu tokenize riêng chứ k phải chung
