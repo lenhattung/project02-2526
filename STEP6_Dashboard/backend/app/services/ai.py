@@ -105,6 +105,20 @@ class MultiModelLabels:
     errors: dict[str, str]
 
 
+def resolve_models_dir() -> Path:
+    settings = get_settings()
+    configured = Path(settings.local_models_dir)
+    if configured.exists():
+        return configured
+
+    project_root = Path(__file__).resolve().parents[3]
+    fallback = project_root.parent / "deploy_all" / "models"
+    if fallback.exists():
+        return fallback
+
+    return configured
+
+
 class MockAIProvider:
     provider = "mock"
     model_name = "rule-based-demo"
@@ -315,8 +329,7 @@ def analyze_with_fallback(content: str) -> AIAnalysis:
 
 
 def get_labeler(model_key: str):
-    settings = get_settings()
-    model_root = Path(settings.local_models_dir)
+    model_root = resolve_models_dir()
     cache_key = f"{model_key}:{model_root}"
     with _MODEL_LOCK:
         if cache_key in _MODEL_CACHE:
@@ -430,6 +443,10 @@ def persist_analysis(db: Session, item: NewsItem) -> AIAnalysisResult:
 
     gemini_code = result.sentiment_code if result.provider == "gemini" else None
     labels = collect_model_labels(item.content, gemini_code=gemini_code)
+    if result.provider != "gemini":
+        fallback_reason = result.raw_result_json.get("fallback_reason") if isinstance(result.raw_result_json, dict) else None
+        if fallback_reason:
+            labels.errors["gemini"] = str(fallback_reason)
 
     item.topic = result.category
     item.importance_level = "high" if result.importance_score >= 0.8 else "normal"
