@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ctsv_dashboard_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ctsv_news}
+      POSTGRES_USER: ${POSTGRES_USER:-ctsv}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_password}
+    ports:
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
+    volumes:
+      - ctsv_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ctsv} -d ${POSTGRES_DB:-ctsv_news}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ctsv_dashboard_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://ctsv:change_this_password@db:5432/ctsv_news}
+      SECRET_KEY: ${SECRET_KEY:-change_this_secret_key}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123456}
+      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-CTSV Administrator}
+      DESKTOP_API_TOKEN: ${DESKTOP_API_TOKEN:-ctsv-demo-desktop-token}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://103.180.138.225:18080","http://localhost:18080"]}
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-1.5-flash}
+      LOCAL_MODELS_DIR: ${LOCAL_MODELS_DIR:-/app/models}
+      ENABLE_LOCAL_MODELS: ${ENABLE_LOCAL_MODELS:-true}
+      LABEL_ON_INGEST: ${LABEL_ON_INGEST:-true}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_HOST_PORT:-18000}:8000"
+    volumes:
+      - ctsv_backend_reports:/app/reports
+      - ../deploy_all/models:/app/models:ro
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://103.180.138.225:18000/api}
+    container_name: ctsv_dashboard_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_HOST_PORT:-18080}:80"
+
+volumes:
+  ctsv_postgres_data:
+  ctsv_backend_reports:

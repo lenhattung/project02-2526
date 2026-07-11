@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ctsv_news}
+      POSTGRES_USER: ${POSTGRES_USER:-ctsv}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ctsv} -d ${POSTGRES_DB:-ctsv_news}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../STEP6_Dashboard/backend
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://ctsv:change_this_password@db:5432/ctsv_news}
+      SECRET_KEY: ${SECRET_KEY:-change_this_secret_key}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123456}
+      ADMIN_FULL_NAME: ${ADMIN_FULL_NAME:-CTSV Administrator}
+      DESKTOP_API_TOKEN: ${DESKTOP_API_TOKEN:-ctsv-demo-desktop-token}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:4173","http://127.0.0.1:4173","http://localhost:18080"]}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_HOST_PORT:-18000}:8000"
+    volumes:
+      - backend_reports:/app/reports
+
+  frontend:
+    build:
+      context: ../STEP6_Dashboard/frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:18000/api}
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_HOST_PORT:-18080}:80"
+
+volumes:
+  postgres_data:
+  backend_reports:

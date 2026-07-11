@@ -7,7 +7,8 @@ from datetime import datetime
 
 LINKS_FILE = "link.txt"           # danh sách URL, mỗi dòng 1 trang (bỏ qua dòng trống / #)
 DEFAULT_URL = "https://www.facebook.com/DNTUConfession/"
-MAX_POSTS_PER_PAGE = 2500         # tối đa số bài cào mỗi trang
+MAX_POSTS_PER_PAGE = int(os.getenv("CTSV_MAX_POSTS_PER_PAGE", "2500"))  # giới hạn an toàn mỗi trang
+DUPLICATE_STOP_THRESHOLD = int(os.getenv("CTSV_DUPLICATE_STOP_THRESHOLD", "10"))
 SCRAPE_COMMENTS = 1           # 1 = cào comment của mỗi bài, 0 = không cào
 MAX_COMMENT_EXPANDS = 50      # >0 = mở popup bình luận 1 lần rồi lấy hết comment đang hiển thị (không cuộn thêm); 0 = không cào
 DB_FILE = "data/posts.db"
@@ -327,6 +328,10 @@ def extract_post_stats(post):
         return "", ""
 
 
+def normalize_for_duplicate(text):
+    return re.sub(r"\s+", " ", (text or "")).strip().lower()
+
+
 def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
     print(f"\n🌐 Đang vào trang {page_url}")
     page.goto(page_url, timeout=60000)
@@ -344,6 +349,7 @@ def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
 
     # Nạp toàn bộ nội dung đã có trong DB (các lần cào trước) để bỏ qua bài trùng 100%
     existing_contents = set(row[0] for row in cursor.execute("SELECT content FROM posts"))
+    existing_content_keys = {normalize_for_duplicate(content) for content in existing_contents}
     print(f"📚 DB hiện có {len(existing_contents)} bài — sẽ bỏ qua bài trùng hoàn toàn")
 
     # Mở file txt 1 lần, ghi từng bài ngay khi có (append để giữ lịch sử các phiên)
@@ -356,6 +362,8 @@ def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
     scroll_count = 0
     no_new_count = 0       # Đếm số lần không có bài mới
     reached_limit = False  # Đã đạt giới hạn max_posts chưa
+    duplicate_streak = 0
+    reached_duplicate_stop = False
 
     # So khớp "đang ở đúng trang cần cào" (bỏ dấu / cuối). Nếu page.url không bắt
     # đầu bằng chuỗi này nghĩa là đã trôi sang trang khác (vd facebook.com home).
@@ -421,7 +429,8 @@ def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
                 seen_contents.add(content[:80])
 
                 # Bài đã có trong DB (cào lần trước hoặc phiên này) hay là bài mới?
-                is_old = content in existing_contents
+                content_duplicate_key = normalize_for_duplicate(content)
+                is_old = content_duplicate_key in existing_content_keys
 
                 # LUÔN in toàn bộ nội dung ra để ĐỐI CHIẾU với bài đang hiển thị trên màn hình
                 # (cả bài MỚI lẫn bài CŨ), bất kể có lưu xuống DB hay không.
@@ -433,8 +442,16 @@ def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
 
                 # Bỏ qua nếu nội dung TRÙNG 100% với bài đã có
                 if is_old:
+                    duplicate_streak += 1
+                    print(f"↪️ Bài đã có trong DB ({duplicate_streak}/{DUPLICATE_STOP_THRESHOLD})")
+                    if duplicate_streak >= DUPLICATE_STOP_THRESHOLD:
+                        print(f"🛑 Đã gặp {DUPLICATE_STOP_THRESHOLD} bài trùng liên tiếp. Dừng cào trang này.")
+                        reached_duplicate_stop = True
+                        break
                     continue
                 existing_contents.add(content)
+                existing_content_keys.add(content_duplicate_key)
+                duplicate_streak = 0
 
                 # Lấy ngày đăng + số like/comment từ bài
                 posted_at = extract_post_date(post)
@@ -473,6 +490,8 @@ def scrape_page(page, conn, page_url, max_posts=MAX_POSTS_PER_PAGE):
                 print(f"⚠️ Lỗi bài {i+1}: {e}")
 
         if reached_limit:
+            break
+        if reached_duplicate_stop:
             break
 
         # Commit định kỳ để không mất dữ liệu nếu lỗi giữa chừng
@@ -753,7 +772,8 @@ def main():
             except Exception as e:
                 print(f"❌ Lỗi khi cào trang {url}: {e}")
 
-        input("\nNhấn Enter để đóng trình duyệt...")
+        if os.getenv("CTSV_SCRAPER_AUTO_CLOSE") != "1":
+            input("\nNhấn Enter để đóng trình duyệt...")
         browser.close()
 
     conn.close()

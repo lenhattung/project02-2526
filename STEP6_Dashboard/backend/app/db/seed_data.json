@@ -1,0 +1,23 @@
+[
+  {
+    "content": "Sinh vien phan anh ve lich hoc va phong hoc trong tuan nay.",
+    "topic": "hoc_tap",
+    "importance_level": "normal",
+    "like_count": 12,
+    "comment_count": 3
+  },
+  {
+    "content": "Can chu y bai viet co dau hieu khung hoang truyen thong lien quan dich vu sinh vien.",
+    "topic": "canh_bao",
+    "importance_level": "high",
+    "like_count": 42,
+    "comment_count": 17
+  },
+  {
+    "content": "Thong tin tuyen tinh nguyen vien cho ngay hoi viec lam sap toi.",
+    "topic": "hoat_dong",
+    "importance_level": "normal",
+    "like_count": 25,
+    "comment_count": 5
+  }
+]

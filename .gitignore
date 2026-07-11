@@ -1,2 +1,20 @@
 .env
 cookies.json
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+dist/
+build/
+.pytest_cache/
+reports/
+deploy_all/
+
+# STEP1_ScrapingData local Python artifacts
+STEP1_ScrapingData/.venv/
+STEP1_ScrapingData/**/__pycache__/
+
+# Local runtime databases and generated frontend cache
+STEP6_Dashboard/backend/*.db
+data/runtime/*.db
+STEP6_Dashboard/frontend/.vite-cache/
