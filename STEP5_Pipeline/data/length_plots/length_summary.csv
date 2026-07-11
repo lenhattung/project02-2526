@@ -1,0 +1,7 @@
+﻿split,unit,text_column,count,mean,std,min,median,max,p95
+train,words,word_segmented,30567,20.39,37.39,1,11.0,1587,65.0
+val,words,word_segmented,6550,20.65,41.42,1,11.0,1015,62.0
+test,words,word_segmented,6551,20.58,39.94,1,11.0,941,63.0
+train,chars,word_segmented,30567,108.76,192.51,2,62.0,7626,335.0
+val,chars,word_segmented,6550,109.79,213.23,2,63.0,5167,311.55
+test,chars,word_segmented,6551,109.67,211.05,3,62.0,4815,324.5

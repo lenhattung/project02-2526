@@ -1,0 +1,15 @@
+{
+  "dataset": "A:\\A _ Working\\Researching\\Th Tùng\\Emotion social classcification\\project02-2526\\STEP4_TrainingModel\\Tokenization\\merch_datasets_student_sentiment_preprocessed.csv",
+  "text_col": "word_segmented",
+  "label_col": "label",
+  "val_size": 0.15,
+  "test_size": 0.15,
+  "split_strategy": "label_data_type",
+  "seed": 42,
+  "created_at": "2026-07-09T15:32:19",
+  "split_files": {
+    "train": "A:\\A _ Working\\Researching\\Th Tùng\\Emotion social classcification\\project02-2526\\STEP5_Pipeline\\data\\train.csv",
+    "val": "A:\\A _ Working\\Researching\\Th Tùng\\Emotion social classcification\\project02-2526\\STEP5_Pipeline\\data\\val.csv",
+    "test": "A:\\A _ Working\\Researching\\Th Tùng\\Emotion social classcification\\project02-2526\\STEP5_Pipeline\\data\\test.csv"
+  }
+}

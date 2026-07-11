@@ -1,0 +1,10 @@
+﻿split,emotion,label_id,label_name,count
+train,Negative,0,tieu_cuc,7996
+train,Neutral,1,trung_lap,12684
+train,Positive,2,tich_cuc,9887
+val,Negative,0,tieu_cuc,1712
+val,Neutral,1,trung_lap,2719
+val,Positive,2,tich_cuc,2119
+test,Negative,0,tieu_cuc,1714
+test,Neutral,1,trung_lap,2718
+test,Positive,2,tich_cuc,2119
